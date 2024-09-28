@@ -8,42 +8,41 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int count = scanner.nextInt();
+        String s = scanner.next();
+        StringBuilder answer = new StringBuilder();
+        String [] splitString = s.split("::");
 
-        ArrayList<String> answerList = new ArrayList<>();
-
-        for (int i = 0; i < count; i++) {
-            String str = scanner.next();
-
-            char[] carr = str.toCharArray();
-
-            int index = carr.length - 1;
-            int lastIndex = 0;
-            int startIndex = -1;
-            for (int j = index - 1; j >= 0; j--) {
-                if (carr[index] > carr[j]) {
-                    startIndex = j;
-                    break;
-                }
-                index = j;
+        int gap = 8-s.split(":").length;
+        StringBuilder sb = new StringBuilder();
+        if(s.substring(0,2).equals("::")) {
+            for(int i = 0 ; i<gap+2; i++) {
+                sb.append("0000:");
             }
-            if (startIndex != -1) {
-                for (int j = carr.length-1; j >= 0; j--) {
-                    if (carr[startIndex] < carr[j]) {
-                        char temp = carr[startIndex];
-                        carr[startIndex] = carr[j];
-                        carr[j] = temp;
-                        Arrays.sort(carr, startIndex + 1, carr.length);
-                        break;
-                    }
-                }
+        } else {
+            for(int i = 0 ; i<gap+1; i++) {
+                sb.append(":0000:");
             }
-            StringBuilder sb = new StringBuilder();
-            for (int k = 0; k < carr.length; k++) {
-                sb.append(carr[k]);
-            }
-            answerList.add(sb.toString());
         }
-        answerList.forEach(System.out::println);
+        String temp  = sb.toString().replace("::",":");
+        s = s.replace("::", temp);
+        String [] splitString2 = s.split(":");
+
+        for(int j = 0; j<splitString2.length; j++) {
+            gap = 4- splitString2[j].length();
+            if(!splitString2[j].equals("")){
+                for(int k = 0; k<gap; k++) {
+                    splitString2[j] = "0"+splitString2[j];
+                }
+            }
+        }
+
+        for(int i = 0 ; i<8; i++) {
+            if(i!=0) {
+                answer.append(":");
+            }
+            answer.append(splitString2[i]);
+        }
+
+        System.out.println(answer.toString());
     }
 }
