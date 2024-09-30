@@ -6,42 +6,36 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
         int N = scanner.nextInt();
-        int H = scanner.nextInt();
+        int M = scanner.nextInt();
 
-        int [] seoksoon = new int[H+1];
-        int [] jongyuseok = new int[H+1];
+        int [] ground = new int[N+2];
+        int [] groundS = new int[N+2];
 
-        for(int i = 0; i<N; i++) {
-            int h = scanner.nextInt();
-            if(i%2==1) {
-                jongyuseok[h]++;
-            } else {
-                seoksoon[h]++;
-            }
+        for(int i = 1 ; i<N+1; i++) {
+            ground[i] = scanner.nextInt();
         }
 
-        for(int i = H-1; i > 0; i--) {
-            seoksoon[i] += seoksoon[i+1];
+        for(int i = 0; i<M; i++) {
+            int start = scanner.nextInt();
+            int end = scanner.nextInt();
+            int k = scanner.nextInt();
+            
+            groundS[start] += k;
+            groundS[end+1] -= k;
+        }
+        
+        for(int  i = 1; i<N+1; i++) {
+            groundS[i] = groundS[i-1] + groundS[i];
         }
 
-        for(int i = H-1; i > 0; i--) {
-            jongyuseok[i] += jongyuseok[i+1];
+        for(int i = 1; i<N+1; i++) {
+            ground[i] += groundS[i];
+        }
+        for(int  i = 1; i <N+1; i++) {
+            System.out.print(ground[i]+" ");
         }
 
-        int minValue = Integer.MAX_VALUE;
-        int count = 0;
-        for(int i = 1; i < H+1; i++) {
-            int sum = seoksoon[i] + jongyuseok[H-i+1];
-
-            if(sum < minValue) {
-                minValue = sum;
-                count = 1;
-            } else if(sum == minValue){
-                count++;
-            }
-        }
-
-        System.out.println(minValue + " " + count);
     }
 }
