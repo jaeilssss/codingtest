@@ -6,36 +6,43 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
         int N = scanner.nextInt();
         int M = scanner.nextInt();
 
-        int [] ground = new int[N+2];
-        int [] groundS = new int[N+2];
+        int count = 0;
 
-        for(int i = 1 ; i<N+1; i++) {
-            ground[i] = scanner.nextInt();
-        }
-
-        for(int i = 0; i<M; i++) {
-            int start = scanner.nextInt();
-            int end = scanner.nextInt();
-            int k = scanner.nextInt();
-            
-            groundS[start] += k;
-            groundS[end+1] -= k;
-        }
-        
-        for(int  i = 1; i<N+1; i++) {
-            groundS[i] = groundS[i-1] + groundS[i];
+        int[] arr = new int[N];
+        int start = 0;
+        int end = 0;
+        for (int i = 0; i < N; i++) {
+            arr[i] = scanner.nextInt();
+            if (start < arr[i]) start = arr[i];
+            end += arr[i];
         }
 
-        for(int i = 1; i<N+1; i++) {
-            ground[i] += groundS[i];
-        }
-        for(int  i = 1; i <N+1; i++) {
-            System.out.print(ground[i]+" ");
-        }
+        while (start <= end) {
+            count = 0;
+            int mid = (start + end) / 2;
+            int sum = 0;
+            for (int i = 0; i < N; i++) {
+                if (sum + arr[i] > mid) {
+                    count++;
+                    sum = 0;
+                }
+                sum += arr[i];
+            }
 
+            if (sum != 0) {
+                count++;
+            }
+//            if (count == M) {
+//                answer = Integer.min(answer, mid);
+//                end = mid - 1;
+//            }
+            if (count > M) start = mid + 1;
+            else end = mid - 1;
+
+        }
+        System.out.println(start);
     }
 }
