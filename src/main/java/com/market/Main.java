@@ -8,25 +8,27 @@ public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
 
-        long X = scanner.nextLong();
-        long Y = scanner.nextLong();
-        long winRate = (Y*100)/X;
-        int left = 1;
-        int right = 1000000000;
-        int answer = -1;
-        while (left <= right) {
-            int mid = (left + right) /2;
+        int N = scanner.nextInt();
+        int M = scanner.nextInt();
 
-            long tempWinRate = ((Y+mid) *100) / (X+mid);
-
-            if(tempWinRate ==winRate) {
-                left = mid +1;
-            }else if(tempWinRate > winRate) {
-                answer = mid;
-                right = mid-1;
+        int [] arr = new int[N+1];
+        for(int i = 0; i <N; i++) {
+            if(i==0) arr[i] = scanner.nextInt();
+            else {
+                arr[i] = arr[i-1] + scanner.nextInt();
             }
-
         }
-        System.out.println(answer);
+
+        for(int k = 0; k < M; k++) {
+            int i = scanner.nextInt();
+            int j = scanner.nextInt();
+
+            if(i-1 != 0) {
+                int answer = arr[j-1] - arr[i-2];
+                System.out.println(answer);
+            } else {
+                System.out.println(arr[j-1]);
+            }
+        }
     }
 }
