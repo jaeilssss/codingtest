@@ -1,50 +1,36 @@
 package com.market;
-
-
-import java.util.Scanner;
-import java.util.Stack;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main2 {
-    public static void main(String[] args)  {
-        Scanner scanner = new Scanner(System.in);
 
-        int N = scanner.nextInt();
-        Stack<HomeWork> stack = new Stack<>();
-        int answer = 0;
-        for(int i = 0 ; i < N; i++) {
-            int a = scanner.nextInt();
-            if(a == 0) {
-                if(!stack.isEmpty()) {
-                    HomeWork homeWork = stack.pop();
-                    homeWork.t--;
-                    if(homeWork.t ==0){
-                        answer += homeWork.point;
-                        continue;
-                    }
-                    stack.push(homeWork);
+    public static int solve(int[] arr) {
+        if (arr.length == 1)
+            return arr[0];
 
-                }
-            } else {
-                int point = scanner.nextInt();
-                int t = scanner.nextInt();
-                t--;
-                if(t==0) {
-                    answer += point;
-                    continue;
-                }
-                stack.push(new HomeWork(point, t));
-            }
+        if (arr.length % 2 == 0) {
+            return arr[arr.length / 2 - 1];
+        } else {
+            return arr[arr.length / 2];
         }
-        System.out.println(answer);
     }
 
-    static class HomeWork {
-        public int point;
-        public int t;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        int[] arr = new int[N];
+        int answer = 0;
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        public HomeWork(int point, int t) {
-            this.point = point;
-            this.t = t;
+        for (int i = 0; i < N; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
         }
+        Arrays.sort(arr);
+
+        answer = solve(arr);
+        System.out.println(answer);
     }
 }
