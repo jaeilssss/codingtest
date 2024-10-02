@@ -6,93 +6,63 @@ import java.util.*;
 
 public class Main2 {
 
-
+   static int A;
+    static int C;
+    static int G;
+    static int T;
     public static void main(String[] args) throws IOException {
 
         Scanner scanner = new Scanner(System.in);
-
+        int S = scanner.nextInt();
         int P = scanner.nextInt();
-        int M = scanner.nextInt();
-        ArrayList<User> userArrayList = new ArrayList<>();
-        ArrayList<Room> rooms = new ArrayList<>();
-        int roomNumber = 1;
+        int answer = 0;
+        char [] DNA = scanner.next().toCharArray();
+        int [] check = new int[4];
+         A = scanner.nextInt();
+         C = scanner.nextInt();
+         G = scanner.nextInt();
+         T = scanner.nextInt();
+
         for(int i = 0; i<P; i++) {
-            int level = scanner.nextInt();
-            String nickname = scanner.next();
-            if(rooms.isEmpty()) {
-                ArrayList<User> nicknames = new ArrayList<>();
-                nicknames.add(new User(level, nickname));
-                rooms.add(new Room(nicknames,roomNumber++, level));
-            }else {
-                boolean enter = false;
+            if(DNA[i] == 'A') check[0]++;
+            if(DNA[i] == 'C') check[1]++;
+            if(DNA[i] == 'G') check[2]++;
+            if(DNA[i] == 'T') check[3]++;
+        }
 
-                for(int k = 0; k<rooms.size(); k++) {
-                    Room room = rooms.get(k);
-                    if(room.level <= level+10 && room.level >= level-10) {
-                        if(room.nickNameList.size() != M) {
-                            room.nickNameList.add(new User(level, nickname));
-                            rooms.set(k, room);
-                            enter = true;
-                            break;
-                        }
+        if(checking(check)) {
+            answer++;
+        }
 
-                    }
+        int start = 0;
 
-                }
-                if(!enter) {
-                    ArrayList<User> nicknames = new ArrayList<>();
-                    nicknames.add(new User(level, nickname));
-                    rooms.add(new Room(nicknames, roomNumber++, level));
+        for(int end = P; end < S; end++) {
 
-                }
+            if(DNA[start] == 'A') check[0]--;
+            if(DNA[start] == 'C') check[1]--;
+            if(DNA[start] == 'G') check[2]--;
+            if(DNA[start] == 'T') check[3]--;
+            start++;
+            ///
 
-
+            if(DNA[end] =='A') check[0]++;
+            if(DNA[end] == 'C') check[1]++;
+            if(DNA[end] == 'G') check[2]++;
+            if(DNA[end] == 'T') check[3]++;
+            if(checking(check)) {
+                answer++;
             }
         }
+        System.out.println(answer);
 
-        for(int i = 0 ; i < rooms.size(); i++) {
-            Room room = rooms.get(i);
-
-            if(room.nickNameList.size() ==M) {
-                System.out.println("Started!");
-                Collections.sort(room.nickNameList);
-                room.nickNameList.forEach(user -> {
-                    System.out.println(user.level + " " + user.nickname);
-                });
-            }else {
-                System.out.println("Waiting!");
-                Collections.sort(room.nickNameList);
-                room.nickNameList.forEach(user -> {
-                    System.out.println(user.level + " " + user.nickname);
-                });
-            }
-        }
     }
 
-    static class Room {
-        public ArrayList<User> nickNameList;
-        public int RoomNumber;
-        public int level;
-
-        public Room(ArrayList<User> nickNameList, int roomNumber, int level) {
-            this.nickNameList = nickNameList;
-            RoomNumber = roomNumber;
-            this.level = level;
-        }
+    public static boolean checking(int [] check) {
+        if(check[0] < A) return false;
+        else if(check[1] < C) return false;
+        else if(check[2] < G) return false;
+        else if(check[3] < T) return false;
+        return true;
     }
 
-    static class User implements Comparable<User> {
-        public int level;
-        public String nickname;
-
-        public User(int level, String nickname) {
-            this.level = level;
-            this.nickname = nickname;
-        }
-
-        @Override
-        public int compareTo(User o) {
-            return this.nickname.compareTo(o.nickname);
-        }
-    }
 }
