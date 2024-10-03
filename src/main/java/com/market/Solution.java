@@ -1,72 +1,53 @@
 package com.market;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Stack;
 
 class Solution {
-    public String[] solution(String[][] plans) {
-        String[] answer = new String[plans.length];
+    public int solution(int[][] targets) {
+        int answer = 0;
 
-        Stack<HomeWork> stack = new Stack<>();
-        int answerIdx = 0;
-        ArrayList<HomeWork> list = new ArrayList<>();
-        for(int i = 0 ; i<plans.length; i++) {
-            list.add(new HomeWork(plans[i][0], plans[i][1], plans[i][2]));
+        ArrayList<Misail> misails = new ArrayList<>();
+
+        for(int i = 0 ; i <targets.length; i++) {
+            misails.add(new Misail(targets[i][0], targets[i][1]));
         }
-        Collections.sort(list);
-        for(int i =0; i < list.size(); i++) {
-            HomeWork homeWork = list.get(i);
-            if(stack.isEmpty()) stack.push(homeWork);
-            else if(stack.peek().getClearTime().compareTo(homeWork.start) > 0) {
-                stack.push(homeWork);
+
+        Collections.sort(misails);
+
+        int maxRange = 0;
+        int maxPositon =0;
+        for(int i = 0; i<misails.size(); i++) {
+            Misail misail = misails.get(i);
+            if(i==0){
+                answer++;
+                maxRange = misail.range;
+                maxPositon = misail.x;
             } else {
-                while (true) {
-                    if(stack.isEmpty()) break;
-                    if(stack.peek().getClearTime().compareTo(homeWork.start) <= 0) {
-                        answer[answerIdx++] = stack.pop().name;
-                    } else {
-                        break;
-                    }
+                if(maxPositon < misail.x && maxPositon+maxRange < misail.x) {
+                    answer++;
                 }
-                stack.push(homeWork);
+                maxRange = misail.range;
+                maxPositon = misail.x;
             }
-        }
-        while (!stack.isEmpty()) {
-            answer[answerIdx++] = stack.pop().name;
         }
         return answer;
     }
 
-    static class HomeWork implements Comparable<HomeWork>{
-        public String name;
-        public String start;
-        public String playTime;
+    public static class Misail implements Comparable<Misail>{
+        public int x;
+        public int range;
 
-        public HomeWork(String name, String start, String playTime) {
-            this.name = name;
-            this.start = start;
-            this.playTime = playTime;
-        }
-
-        public String getClearTime() {
-            String [] time = start.split(":");
-
-            int hour = Integer.parseInt(time[0]);
-            int minute = Integer.parseInt(time[1]);
-            int playTimeInteger = Integer.parseInt(playTime);
-
-            minute += playTimeInteger;
-            hour += minute / 60;
-            minute = minute % 60;
-
-            return hour + ":" + minute;
+        public Misail(int x, int range) {
+            this.x = x;
+            this.range = range;
         }
 
         @Override
-        public int compareTo(HomeWork o) {
-            return this.start.compareTo(o.start);
+        public int compareTo(Misail o) {
+            return this.x - o.x;
         }
     }
 }
