@@ -48,6 +48,9 @@ public class Main {
                     stack.pop();
                 }
             }
+            HashMap<Integer, Boolean> map = new HashMap<>();
+
+            String.valueOf(1).toCharArray();
         }
         System.out.println(answer);
     }

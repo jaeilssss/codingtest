@@ -1,53 +1,43 @@
 package com.market;
 
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 class Solution {
-    public int solution(int[][] targets) {
-        int answer = 0;
+    public int solution(String A, String B) {
+        // Implement your solution here
 
-        ArrayList<Misail> misails = new ArrayList<>();
+        A = A.replace(":","");
+        B = B.replace(":","");
 
-        for(int i = 0 ; i <targets.length; i++) {
-            misails.add(new Misail(targets[i][0], targets[i][1]));
-        }
+        int startTime = Integer.parseInt(A);
+        int endTime = Integer.parseInt(B);
 
-        Collections.sort(misails);
+        for(int i = startTime; i< endTime; i++) {
+            int second = i %100;
 
-        int maxRange = 0;
-        int maxPositon =0;
-        for(int i = 0; i<misails.size(); i++) {
-            Misail misail = misails.get(i);
-            if(i==0){
-                answer++;
-                maxRange = misail.range;
-                maxPositon = misail.x;
-            } else {
-                if(maxPositon < misail.x && maxPositon+maxRange < misail.x) {
-                    answer++;
-                }
-                maxRange = misail.range;
-                maxPositon = misail.x;
+            if(second >= 60) {
+                second = second-60;
+                i -= 60;
+                i += 100;
+            }
+
+            int minute = i % 10000;
+            minute -= second;
+            String minuteStr = String.valueOf(minute);
+
+            minute = Integer.parseInt(minuteStr.substring(0,minuteStr.length()-2));
+            if(minute >= 60) {
+                minute = 60-minute;
+                i -= 6000;
+                i+=10000;
+            }
+
+            int hour = i / 100000;
+            if(hour <=24) {
+                hour = 0;
             }
         }
-        return answer;
-    }
-
-    public static class Misail implements Comparable<Misail>{
-        public int x;
-        public int range;
-
-        public Misail(int x, int range) {
-            this.x = x;
-            this.range = range;
-        }
-
-        @Override
-        public int compareTo(Misail o) {
-            return this.x - o.x;
-        }
+        return 0;
     }
 }
